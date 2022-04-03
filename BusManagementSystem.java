@@ -1,6 +1,8 @@
 import edu.princeton.cs.algs4.DijkstraSP;
 import edu.princeton.cs.algs4.EdgeWeightedDigraph;
 import edu.princeton.cs.algs4.DirectedEdge;
+import edu.princeton.cs.algs4.TST;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -12,6 +14,51 @@ public class BusManagementSystem {
     public static HashMap<String, ArrayList<Integer>> stops1 = new HashMap<>();
     public static Hashtable<Integer, Integer> stops2= new Hashtable<>();
     public static EdgeWeightedDigraph vancouver;
+    public static TST<ArrayList<Integer>> stopsTST = new TST<>();
+
+    public static class stop {
+        public int stopID;
+        public String stopName;
+    }
+
+    public static class time{
+        public int hours;
+        public int minutes;
+        public int seconds;
+
+        time(String time){
+            time = time.replace(" ", "");
+            String[] st = time.split(":");
+            this.hours = Integer.parseInt(st[0]);
+            this.minutes = Integer.parseInt(st[1]);
+            this.seconds = Integer.parseInt(st[2]);
+        }
+
+        boolean isValid(){
+            return (hours >= 0 && hours <= 23) && (minutes >= 0 && minutes <= 59) && (seconds >= 0 && seconds <= 59);
+        }
+    }
+    public static void TSTManager(String s, int id){
+        String[] split = s.split(" ");
+        if(split[0].equals("WB")||split[0].equals("EB")||split[0].equals("SB")||split[0].equals("NB")){
+            s = s.replaceFirst(split[0] + " ","" );
+            s = s + " " + split[0];
+        }
+        ArrayList<Integer> a;
+        if(stopsTST.contains(s)){
+            a = stopsTST.get(s);
+            a.add(id);
+            a = stops1.get(s);
+            a.add(id);
+        }
+        else{
+            a = new ArrayList<>();
+            a.add(id);
+            stopsTST.put(s, a);
+            stops1.put(s, a);
+        }
+    }
+
     public static void fillStops(){
         try{
             BufferedReader br = new BufferedReader(new FileReader("stops.txt"));
@@ -24,15 +71,18 @@ public class BusManagementSystem {
                     st.stopID = Integer.parseInt(s[0]);
                     st.stopName = s[2];
                     stops.add(st);
+                    TSTManager(st.stopName, stops.size()-1);
                     if(stops1.containsKey(st.stopName)){
-                        ArrayList<Integer> a = stops1.get(st.stopName);
-                        a.add(st.stopID);
-                        System.out.println("Stop4");
+                        //ArrayList<Integer> a = stops1.get(st.stopName);
+                        //a.add(st.stopID);
+                        //a = stopsTST.get(st.stopName);
+                        //a.add(st.stopID);
                     }
                     else {
-                        ArrayList<Integer> a = new ArrayList<>();
-                        a.add(st.stopID);
-                        stops1.put(st.stopName, a);
+                        //ArrayList<Integer> a = new ArrayList<>();
+                        //a.add(st.stopID);
+                        //stops1.put(st.stopName, a);
+                        //stopsTST.put(st.stopName, a);
                     }
                     stops2.put(st.stopID, stops2.size());
                 }
@@ -54,9 +104,10 @@ public class BusManagementSystem {
                     String[] st = s.split(",");
                     DirectedEdge e = new DirectedEdge(stops2.get(Integer.parseInt(st[0])),
                             stops2.get(Integer.parseInt(st[1])),
-                            (st[3].equals("0") ? 2 : (Integer.parseInt(st[3])/100)));
+                            (st[2].equals("0") ? 2 : (Integer.parseInt(st[2])/100)));
                     vancouver.addEdge(e);
                 }
+                ++i;
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -70,8 +121,14 @@ public class BusManagementSystem {
                     String[] st1 = s.split(",");
                     String[] st2 = prevS.split(",");
                     if(st1[0].equals(st2[0])){
-                        DirectedEdge edge = new DirectedEdge(stops2.get(Integer.parseInt(st2[3])),stops2.get(Integer.parseInt(st1[3])),1);
-                        vancouver.addEdge(edge);
+                        time time1 = new time(st1[1]);
+                        time time2 = new time(st1[2]);
+                        time time3 = new time(st2[1]);
+                        time time4 = new time(st2[2]);
+                        if(time1.isValid()&&time2.isValid()&&time3.isValid()&&time4.isValid()) {
+                            DirectedEdge edge = new DirectedEdge(stops2.get(Integer.parseInt(st2[3])), stops2.get(Integer.parseInt(st1[3])), 1);
+                            vancouver.addEdge(edge);
+                        }
                     }
                 }
                 ++i;
@@ -105,14 +162,32 @@ public class BusManagementSystem {
         System.out.println("Stop3");
     }
     public static void searchBusStops(String entry){
-
+        Iterable<String> matches = stopsTST.keysWithPrefix(entry);
+        ArrayList<Integer> linesNeeded = new ArrayList<>();
+        for (String stop : matches){
+            linesNeeded.add(stops1.get(stop).get(0));
+        }
+        linesNeeded.sort(null);
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("stops.txt"));
+            int i = -2;
+            int j=0,k=0;
+            k = linesNeeded.get(j);
+            String s;
+            while((s = br.readLine())!=null){
+                i++;
+                if(i==k){
+                    System.out.println(s);
+                    j++;
+                    k = linesNeeded.get((j >= linesNeeded.size() ? linesNeeded.size() -1: j));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("Stop4");
     }
     public static void searchArrivalTime(String time){
 
     }
-    public static class stop {
-        public int stopID;
-        public String stopName;
-    }
-
 }
