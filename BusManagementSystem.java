@@ -29,6 +29,12 @@ public class BusManagementSystem {
         public int seconds;
         public int totalSeconds;
 
+        time(){
+            this.seconds = 0;
+            this.minutes = 0;
+            this.hours = 0;
+            this.totalSeconds = 0;
+        }
         time(String time){
             time = time.replace(" ", "");
             String[] st = time.split(":");
@@ -42,9 +48,16 @@ public class BusManagementSystem {
             return (hours >= 0 && hours <= 23) && (minutes >= 0 && minutes <= 59) && (seconds >= 0 && seconds <= 59);
         }
 
-        int getTotal(String time){
-            time newTime = new time(time);
-            return newTime.totalSeconds;
+        boolean correctForm(String time){
+            String[] s = time.split(":");
+            try{
+                int i = Integer.parseInt(s[0]);
+                int j = Integer.parseInt(s[1]);
+                int k = Integer.parseInt(s[2]);
+            }catch (NumberFormatException e){
+                return false;
+            }
+            return true;
         }
     }
     public static void TSTManager(String s, int id){
@@ -166,7 +179,30 @@ public class BusManagementSystem {
         }
 
     }
-    public static void findShortestPath(String startStop, String endStop){
+    public static void findShortestPath(String entry){
+        String startStop, endStop;
+        if(entry == null || entry.equals("") || entry.split(",").length !=2){
+            System.out.println("Invalid entry");
+            return;
+        }
+        startStop = entry.split(",")[0];
+        endStop = entry.split(",")[1];
+        if(startStop == null || startStop.equals("")){
+            System.out.println("Please enter a value for Stop A");
+            return;
+        }
+        if(endStop == null || endStop.equals("")){
+            System.out.println("Please enter a value for Stop B");
+            return;
+        }
+        if(!stops1.containsKey(startStop)){
+            System.out.println("Stop entry A not found");
+            return;
+        }
+        if(!stops1.containsKey(endStop)){
+            System.out.println("Stop entry B not found");
+            return;
+        }
         int stop1 = stops1.get(startStop).get(0);
         stop1 = stops2.get(stop1);
         int stop2 = stops1.get(endStop).get(0);
@@ -174,6 +210,7 @@ public class BusManagementSystem {
         DijkstraSP sp = new DijkstraSP(vancouver, stop1);
         if(!sp.hasPathTo(stop2)){
             System.out.println("No Path available");
+            return;
         }
         for(DirectedEdge de : sp.pathTo(stop2)){
             String path = de.toString();
@@ -189,7 +226,16 @@ public class BusManagementSystem {
         System.out.println("Stop 3");
     }
     public static void searchBusStops(String entry){
+        if(entry == null || entry.equals("")){
+            System.out.println("Please enter a value to search for");
+            return;
+        }
         Iterable<String> matches = stopsTST.keysWithPrefix(entry);
+        String errorCheck = matches.toString();
+        if(errorCheck == null || errorCheck.equals("") ){
+            System.out.println("No Bust Stops Found");
+            return;
+        }
         ArrayList<Integer> linesNeeded = new ArrayList<>();
         for (String stop : matches){
             ArrayList<Integer> matches2 = stopsTST.get(stop);
@@ -203,10 +249,13 @@ public class BusManagementSystem {
             int j=0,k;
             k = linesNeeded.get(j);
             String s;
+            String[] split;
             while((s = br.readLine())!=null){
                 i++;
                 if(i==k){
-                    System.out.println(s);
+                    split = s.split(",");
+                    System.out.printf("Stop ID: %s, Stop Code: %s, Stop Name: %s, Description: %s, Latitude and Longitude: (%s, %s), Zone ID: %s, URL for Stop: %s, Location Type: %s, Parent Station (If any): %s\n",
+                            split[0],split[1],split[2],split[3],split[4],split[5],split[6],split[7],split[8],(split.length > 9?split[9]:""));
                     j++;
                     k = linesNeeded.get((j >= linesNeeded.size() ? linesNeeded.size() -1: j));
                 }
@@ -217,6 +266,18 @@ public class BusManagementSystem {
         System.out.println("Stop 4");
     }
     public static void searchArrivalTime(String time){
+        if(time==null||time.equals("")){
+            System.out.println("Please enter a time in the form hh:mm:ss");
+            return;
+        }
+        if(!new time().correctForm(time)){
+            System.out.println("Invalid entry for time please use numbers 0-23 for hours and 0-59 for minutes/seconds");
+            return;
+        }
+        if(!new time(time).isValid()){
+            System.out.println("Invalid entry for time please use numbers 0-23 for hours and 0-59 for minutes/seconds");
+            return;
+        }
         if(arrivals.contains(new time(time).totalSeconds)){
             RedBlackBST<Integer, String> bst = arrivals.get(new time(time).totalSeconds);
             Iterable<Integer> keys = bst.keys();
