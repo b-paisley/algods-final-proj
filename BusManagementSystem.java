@@ -51,9 +51,9 @@ public class BusManagementSystem {
         boolean correctForm(String time){
             String[] s = time.split(":");
             try{
-                int i = Integer.parseInt(s[0]);
-                int j = Integer.parseInt(s[1]);
-                int k = Integer.parseInt(s[2]);
+                Integer.parseInt(s[0]);
+                Integer.parseInt(s[1]);
+                Integer.parseInt(s[2]);
             }catch (NumberFormatException e){
                 return false;
             }
@@ -70,14 +70,11 @@ public class BusManagementSystem {
         if(stopsTST.contains(s)){
             a = stopsTST.get(s);
             a.add(id);
-            //a = stops1.get(s);
-            //a.add(id);
         }
         else{
             a = new ArrayList<>();
             a.add(id);
             stopsTST.put(s, a);
-            //stops1.put(s, a);
         }
     }
 
@@ -98,14 +95,11 @@ public class BusManagementSystem {
                     if(stops1.containsKey(st.stopName)){
                         ArrayList<Integer> a = stops1.get(st.stopName);
                         a.add(st.stopID);
-                        //a = stopsTST.get(st.stopName);
-                        //a.add(st.stopID);
                     }
                     else {
                         ArrayList<Integer> a = new ArrayList<>();
                         a.add(st.stopID);
                         stops1.put(st.stopName, a);
-                        //stopsTST.put(st.stopName, a);
                     }
                     stops2.put(st.stopID, stops2.size());
                 }
@@ -114,7 +108,6 @@ public class BusManagementSystem {
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("Stop");
     }
     public static void fillGraph(){
         try{
@@ -162,7 +155,6 @@ public class BusManagementSystem {
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("Stop 2");
     }
     public static void BSTManager(String time,String id, String content){
         time t = new time(time);
@@ -223,7 +215,6 @@ public class BusManagementSystem {
             double outStr3 = Double.parseDouble(splitPath[1]);
             System.out.printf("%s->%s  %.2f\n", outStr1, outStr2, outStr3);
         }
-        System.out.println("Stop 3");
     }
     public static void searchBusStops(String entry){
         if(entry == null || entry.equals("")){
@@ -233,14 +224,13 @@ public class BusManagementSystem {
         Iterable<String> matches = stopsTST.keysWithPrefix(entry);
         String errorCheck = matches.toString();
         if(errorCheck == null || errorCheck.equals("") ){
-            System.out.println("No Bust Stops Found");
+            System.out.println("No Bus Stops Found");
             return;
         }
         ArrayList<Integer> linesNeeded = new ArrayList<>();
         for (String stop : matches){
             ArrayList<Integer> matches2 = stopsTST.get(stop);
             linesNeeded.addAll(matches2);
-            //linesNeeded.add(stops1.get(stop).get(0));
         }
         linesNeeded.sort(null);
         try{
@@ -263,10 +253,9 @@ public class BusManagementSystem {
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("Stop 4");
     }
     public static void searchArrivalTime(String time){
-        if(time==null||time.equals("")){
+        if(time==null||time.equals("")||time.split(":").length!=3){
             System.out.println("Please enter a time in the form hh:mm:ss");
             return;
         }
@@ -291,6 +280,5 @@ public class BusManagementSystem {
         else{
             System.out.println("No trips arriving at that time");
         }
-        System.out.println("Stop 5");
     }
 }

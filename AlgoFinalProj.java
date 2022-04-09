@@ -33,6 +33,7 @@ public class AlgoFinalProj {
                     System.out.print("""
                             You have selected the Shortest Path between two stops, please enter the two stops separated by a comma: A,B
                             \te.g.'EB W 41 AVE FS COLLINGWOOD ST,WB HASTINGS ST FS SPERLING AVE'
+                            \tEnter \\back to return to previous menu
                             Enter:""");
                     entry = input.nextLine();
                     if(entry.equalsIgnoreCase("\\back")){
@@ -47,6 +48,7 @@ public class AlgoFinalProj {
                 while(!ext){
                     System.out.print("""
                             You have selected the Search for Bus Stops, please enter the Keyword you want to search with
+                            \tEnter \\back to return to previous menu
                             Enter:""");
                     entry = input.nextLine();
                     if(entry.equalsIgnoreCase("\\back")){
@@ -62,6 +64,7 @@ public class AlgoFinalProj {
                     System.out.print("""
                             You have selected the Search for Trips arriving at a given time, please enter the time you want in the form hh:mm:ss
                             \te.g. '12:25:00'
+                            \tEnter \\back to return to previous menu
                             Enter:""");
                     entry = input.nextLine();
                     if(entry.equalsIgnoreCase("\\back")){
@@ -70,6 +73,9 @@ public class AlgoFinalProj {
                     }
                     BusManagementSystem.searchArrivalTime(entry);
                 }
+            }
+            else{
+                System.out.println("Invalid Entry");
             }
         }
     }
