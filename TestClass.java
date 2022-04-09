@@ -30,10 +30,10 @@ public class TestClass {
         System.out.println(test.getRuns());
         test.setRuns(0);
         System.out.println(test.getRuns());*/
-        BusManagementSystem.fillStops();
-        BusManagementSystem.fillGraph();
-        BusManagementSystem.findShortestPath("EB W 41 AVE FS COLLINGWOOD ST","WB HASTINGS ST FS SPERLING AVE");
-        BusManagementSystem.searchBusStops("HAS");
-        BusManagementSystem.searchArrivalTime("25:25:00");
+        //BusManagementSystem.fillStops();
+        //BusManagementSystem.fillGraph();
+        //BusManagementSystem.findShortestPath("EB W 41 AVE FS COLLINGWOOD ST","WB HASTINGS ST FS SPERLING AVE");
+        //BusManagementSystem.searchBusStops("jekf");
+        //BusManagementSystem.searchArrivalTime("120:9:7");
     }
 }
