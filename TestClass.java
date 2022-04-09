@@ -32,7 +32,8 @@ public class TestClass {
         System.out.println(test.getRuns());*/
         BusManagementSystem.fillStops();
         BusManagementSystem.fillGraph();
-        //BusManagementSystem.findShortestPath("WB HASTINGS ST FS SPERLING AVE","EB W 41 AVE FS COLLINGWOOD ST");
+        BusManagementSystem.findShortestPath("EB W 41 AVE FS COLLINGWOOD ST","WB HASTINGS ST FS SPERLING AVE");
         BusManagementSystem.searchBusStops("HAS");
+        BusManagementSystem.searchArrivalTime("25:25:00");
     }
 }
