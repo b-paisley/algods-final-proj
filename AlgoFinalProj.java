@@ -10,7 +10,7 @@ public class AlgoFinalProj {
                     Welcome to Vancouver's Bus Management Service.
                     Please enter to corresponding number for the service you want to use:
                     \tShortest Path Between two stops: '1'
-                    \tSearch For a Bust Stop: '2'
+                    \tSearch For a Bus Stop: '2'
                     \tSearch For Trips Arriving at a Certain Time: '3'
                     \tTo exit the program type 'exit'
                     Enter:""");
@@ -43,7 +43,7 @@ public class AlgoFinalProj {
                     BusManagementSystem.findShortestPath(entry);
                 }
             }
-            if(i == 2){
+            else if(i == 2){
                 boolean ext = false;
                 while(!ext){
                     System.out.print("""
@@ -58,7 +58,7 @@ public class AlgoFinalProj {
                     BusManagementSystem.searchBusStops(entry);
                 }
             }
-            if(i == 3){
+            else if(i == 3){
                 boolean ext = false;
                 while(!ext){
                     System.out.print("""

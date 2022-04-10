@@ -255,6 +255,7 @@ public class BusManagementSystem {
             System.out.println("Please enter a value to search for");
             return;
         }
+        entry = entry.toUpperCase();
         //Method that returns all the Keys in the TST that start with the input and are indexed to a value
         Iterable<String> matches = stopsTST.keysWithPrefix(entry);
         //More error checking, making sure there are matches before proceeding
